@@ -1,26 +1,47 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <header class="header">
+      <div class="app-name">Blogr</div>
+      <div id="nav">
+
+      </div>
+    </header>
+
     <router-view/>
   </div>
 </template>
+<script>
 
+export default {
+  name: 'App',
+  component: {
+
+  }
+
+}
+</script>
 <style>
+body{
+  margin: 0;
+
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Baloo Chettan 2', cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
+  width: 100%;
 }
-
-#nav {
-  padding: 30px;
+.header{
+  display: flex;
+  background-color: fuchsia;
+  height: 25%;
+  padding: 1rem;
 }
-
+.app-name{
+  font-weight: 900;
+  font-size: 3rem;
+}
 #nav a {
   font-weight: bold;
   color: #2c3e50;
