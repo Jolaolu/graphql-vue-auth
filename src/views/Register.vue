@@ -1,13 +1,13 @@
 <template>
-  <div class="sign-up">
+  <div class="auth">
     <h3>Sign Up</h3>
-    <form action="POST" @submit.prevent="register">
+    <form action="POST" @submit.prevent="registerUser">
       <label for="name"> Name</label>
-      <input type="text" name="name" id placeholder="John Doe" v-model="name" />
+      <input type="text" name="name" id placeholder="John Doe" v-model="authDetails.name" />
       <label for="email">Email Address</label>
-      <input type="email" name="email" id placeholder="jagaban@borgu.com" v-model="email" />
+      <input type="email" name="email" id placeholder="jagaban@borgu.com" v-model="authDetails.email" />
       <label for="password">Password</label>
-      <input type="password" name="password" id placeholder="password" v-model="password" />
+      <input type="password" name="password" id placeholder="password" v-model="authDetails.password" />
       <button>submit</button>
 
      <p> Already have an account? <router-link to="/login"> Login </router-link> </p>
@@ -19,15 +19,22 @@ export default {
   name: 'Register',
   data () {
     return {
-      name: '',
-      email: '',
-      password: ''
+      authDetails: {
+        name: '',
+        email: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    registerUser: function () {
+      console.log(this.authDetails)
     }
   }
 }
 </script>
 <style>
-.sign-up {
+.auth {
   display: flex;
   flex-direction: column;
   align-items: center;
