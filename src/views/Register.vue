@@ -8,13 +8,14 @@
       <input type="email" name="email" id placeholder="jagaban@borgu.com" v-model="authDetails.email" />
       <label for="password">Password</label>
       <input type="password" name="password" id placeholder="password" v-model="authDetails.password" />
-      <button>submit</button>
+      <button class="auth-submit">submit</button>
 
-     <p> Already have an account? <router-link to="/login"> Login </router-link> </p>
+     <p class="auth-text"> Already have an account? <router-link to="/login"> Login </router-link> </p>
     </form>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'Register',
   data () {
@@ -27,55 +28,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['register']),
+
     registerUser: function () {
       console.log(this.authDetails)
+      this.register(this.authDetails)
     }
   }
 }
 </script>
 <style>
-.auth {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-h3 {
-  margin-top: 2rem;
-}
-form {
-  max-width: 50%;
-  margin-top: 1rem;
-  padding: 4rem;
-  border: 1px solid #c4c4ce;
 
-}
-input {
-  display: block;
-  margin-bottom: 1.2rem;
-  padding: 0.4rem 1.2rem;
-  background-color: white;
-}
-button {
-  margin-top: .5rem;
-  padding: .5rem 1rem;
-  border: none;
-  background-color: fuchsia;
-  color: white;
-  font-weight: bold;
-  text-transform: capitalize;
-  border-radius: 0.3rem;
-}
-a{
-  color: black;
-  text-decoration: none;
-}
-a:visited{
-  color: inherit;
-}
-a:hover{
-  text-decoration: underline;
-}
- p{
-   margin-top: .5rem;
- }
 </style>

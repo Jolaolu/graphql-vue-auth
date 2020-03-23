@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -7,8 +8,21 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Home',
-    component: () => import('@/views/Home.vue')
+    component: () => import('@/views/Home.vue'),
+    meta: { requiresAuth: true }
   },
+  {
+    path: '/posts',
+    name: 'Posts',
+    component: () => import('@/views/Posts.vue'),
+    meta: { requiresAuth: true }
+  },
+  // {
+  //   path: '/poss/:id',
+  //   name: 'Post',
+  //   component: () => import( '@/views/Post.vue' ),
+  //   meta: { requiresAuth: true }
+  // },
   {
     path: '/login',
     name: 'Login',
@@ -31,6 +45,29 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+
+})
+
+// Global Route Guards
+
+router.beforeEach((to, from, next) => {
+  // Check if the user is logged in
+
+  const isUserLoggedIn = store.getters.isAuthenticated
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isUserLoggedIn) {
+      store.dispatch('logoutUser')
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
