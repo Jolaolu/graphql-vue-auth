@@ -15,7 +15,7 @@ export default new Vuex.Store({
   getters: {
     isAuthenticated: state => !!state.token,
     authStatus: state => state.authStatus,
-    getUser: state => state.user
+    user: state => state.user
   },
   mutations: {
     SET_TOKEN (state, token) {
@@ -32,15 +32,11 @@ export default new Vuex.Store({
   },
   actions: {
     async register ({ commit, dispatch }, authDetails) {
-      console.log(authDetails)
       try {
         const { data } = await apolloClient.mutate({ mutation: REGISTER_USER, variables: { ...authDetails } })
-        console.log(data)
-        console.log(data.createUser.token)
         const token = JSON.stringify(data.createUser.token)
         commit('SET_TOKEN', token)
         // onLogin(apolloClient, user.token)
-        console.log(token)
         localStorage.setItem('apollo-token', token)
         dispatch('setUser')
       } catch (e) {
@@ -48,25 +44,19 @@ export default new Vuex.Store({
       }
     },
     async login ({ commit, dispatch }, authDetails) {
-      console.log(authDetails)
       try {
         const { data } = await apolloClient.mutate({ mutation: LOGIN_USER, variables: { ...authDetails } })
-        console.log(data)
-        console.log(data.login.token)
         const token = JSON.stringify(data.login.token)
         commit('SET_TOKEN', token)
-        console.log(token)
         localStorage.setItem('apollo-token', token)
-        console.log(localStorage.getItem('apollo-token'))
         dispatch('setUser')
       } catch (e) {
         console.log(e)
       }
     },
     async setUser ({ commit }) {
-      console.log(localStorage.getItem('apollo-token'))
       const { data } = await apolloClient.query({ query: LOGGED_IN_USER })
-      commit('LOGIN_USER', data.getUser)
+      commit('LOGIN_USER', data.me)
     },
     async logOut ({ commit, dispatch }) {
       commit('LOGOUT_USER')

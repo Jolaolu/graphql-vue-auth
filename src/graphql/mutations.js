@@ -14,11 +14,3 @@ mutation createUser($name: String! $email: String! $password: String! ) {
     }
 }
 `
-// export const NEW_POST = gql`
-//    mutation createPost(){
-//     createPost(){
-
-//     }
-//   }
-
-// `

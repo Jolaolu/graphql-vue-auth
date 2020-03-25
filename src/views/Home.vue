@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-
+    <main>
+     Yaay! You are authenticated!
+    </main>
   </div>
 </template>
 
@@ -13,7 +15,7 @@ export default {
 
   },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['user'])
   }
 }
 </script>

@@ -12,18 +12,6 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/posts',
-    name: 'Posts',
-    component: () => import('@/views/Posts.vue'),
-    meta: { requiresAuth: true }
-  },
-  // {
-  //   path: '/poss/:id',
-  //   name: 'Post',
-  //   component: () => import( '@/views/Post.vue' ),
-  //   meta: { requiresAuth: true }
-  // },
-  {
     path: '/login',
     name: 'Login',
     // route level code-splitting
@@ -57,7 +45,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!isUserLoggedIn) {
-      store.dispatch('logout')
+      store.dispatch('logOut')
       next({
         path: '/login',
         query: { redirect: to.fullPath }
