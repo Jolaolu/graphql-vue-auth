@@ -1,4 +1,4 @@
-// import gql from 'graphql-tag'
+import gql from 'graphql-tag'
 
 // export const ALL_POST = gql`
 
@@ -10,5 +10,15 @@
 
 // `
 
-// export const LOGGED_IN_USER = gql`
-// `
+export const LOGGED_IN_USER = gql`
+  query {
+    me {
+      id
+      name 
+      email
+      posts{
+        title
+      }
+    }
+  }
+`

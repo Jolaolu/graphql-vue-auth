@@ -33,8 +33,10 @@ export default {
     registerUser: function () {
       console.log(this.authDetails)
       this.register(this.authDetails)
+        .then(() => this.$router.push('/dashboard'))
     }
   }
+
 }
 </script>
 <style>

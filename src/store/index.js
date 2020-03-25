@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { onLogin, onLogout } from '@/vue-apollo'
+import { onLogout, apolloClient } from '@/vue-apollo'
 import { LOGGED_IN_USER } from '@/graphql/queries'
 import { LOGIN_USER, REGISTER_USER } from '@/graphql/mutations'
 
@@ -14,7 +14,7 @@ export default new Vuex.Store({
   },
   getters: {
     isAuthenticated: state => !!state.token,
-    authStatus: state => state.status,
+    authStatus: state => state.authStatus,
     getUser: state => state.user
   },
   mutations: {
@@ -24,44 +24,53 @@ export default new Vuex.Store({
     LOGIN_USER (state, user) {
       state.authStatus = true
       state.user = { ...user }
-      // window.location.href = '/home'
     },
     LOGOUT_USER (state) {
-      state.status = ''
-      state.token = '' && localStorage.removeItem('token')
+      state.authStatus = ''
+      state.token = '' && localStorage.removeItem('apollo-token')
     }
   },
   actions: {
     async register ({ commit, dispatch }, authDetails) {
       console.log(authDetails)
       try {
-        const { data } = await this.$apollo.mutate({ mutation: REGISTER_USER, variables: { authDetails } })
+        const { data } = await apolloClient.mutate({ mutation: REGISTER_USER, variables: { ...authDetails } })
         console.log(data)
-        dispatch('setUser', { token: data.token })
+        console.log(data.createUser.token)
+        const token = JSON.stringify(data.createUser.token)
+        commit('SET_TOKEN', token)
+        // onLogin(apolloClient, user.token)
+        console.log(token)
+        localStorage.setItem('apollo-token', token)
+        dispatch('setUser')
       } catch (e) {
         console.log(e)
       }
     },
-    async LOGIN_USER ({ commit, dispatch }, authDetails) {
+    async login ({ commit, dispatch }, authDetails) {
       console.log(authDetails)
       try {
-        const { data } = await this.$apollo.mutate({ mutation: LOGIN_USER, variables: { authDetails } })
+        const { data } = await apolloClient.mutate({ mutation: LOGIN_USER, variables: { ...authDetails } })
         console.log(data)
-        dispatch('setUser', { token: data.token })
+        console.log(data.login.token)
+        const token = JSON.stringify(data.login.token)
+        commit('SET_TOKEN', token)
+        console.log(token)
+        localStorage.setItem('apollo-token', token)
+        console.log(localStorage.getItem('apollo-token'))
+        dispatch('setUser')
       } catch (e) {
         console.log(e)
       }
     },
-    async SET_USER ({ commit }, user) {
-      commit('SET_TOKEN', user.token)
-      onLogin(this.$apollo.provider.defaultClient, user.token)
-
-      const { data } = await this.$apollo.query({ query: LOGGED_IN_USER })
+    async setUser ({ commit }) {
+      console.log(localStorage.getItem('apollo-token'))
+      const { data } = await apolloClient.query({ query: LOGGED_IN_USER })
       commit('LOGIN_USER', data.getUser)
     },
-    async LOGOUT_USER ({ commit, dispatch }) {
-      onLogout(this.$apollo.provider.defaultClient)
+    async logOut ({ commit, dispatch }) {
       commit('LOGOUT_USER')
+      onLogout(apolloClient)
     }
   }
 

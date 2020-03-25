@@ -3,7 +3,7 @@
     <header class="header">
       <div class="app-name">Blogr</div>
       <div id="nav">
-        <button v-if="userAuthenticated" class="auth-button"> Log Out </button>
+        <button v-if="authStatus" class="auth-button" @click="logOut" > Log Out</button>
         <!-- <button class="auth-button" v-else> Log In</button> -->
       </div>
     </header>
@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   component: {
@@ -19,8 +19,17 @@ export default {
   },
   data () {
     return {
-      userAuthenticated: false
+
     }
+  },
+  methods: {
+    logOut: function () {
+      this.$store.dispatch('logOut')
+        .then(() => this.$router.push('/login'))
+    }
+  },
+  computed: {
+    ...mapGetters(['authStatus'])
   }
 
 }

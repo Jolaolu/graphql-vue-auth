@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data () {
@@ -25,8 +26,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['login']),
     loginUser: function () {
-
+      console.log(this.authDetails)
+      this.login(this.authDetails)
+        .then(() => this.$router.push('/dashboard'))
     }
   }
 }
